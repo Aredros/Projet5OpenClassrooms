@@ -6,7 +6,7 @@ const quantSelected = document.querySelector("#quantity");
 
 // Sélection du bouton Ajouter au panier
 const btnSend = document.querySelector("#addToCart");
-
+ 
 const getProductId = () => {
   return new URL(location.href).searchParams.get("id");
 };
@@ -77,7 +77,6 @@ let productRegistered = (product) => {
         description: product.description,
         color: colorIdSelected.value,
         quantity: parseInt(quantSelected.value, 10),
-        price: product.price,
         totalPrice: product.price * parseInt(quantSelected.value, 10),
       };
       console.log(optionProduct);

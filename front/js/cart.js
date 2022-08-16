@@ -14,10 +14,25 @@ if (basket === null || basket.length === 0) {
   document.querySelector("#titrePanier").textContent = "Votre panier";
 }
 
+produits=[]
+
+function callMe(theId, theQuantity){ 
+  let i = 0;
+  fetch(`http://localhost:3000/api/products/${theId}`)
+  .then((response) => {
+    return response.json();
+  })
+  .then((product) => {
+      document.getElementById(`precio-${theId}`).textContent = 'Prix unitaire est: ' + product.price;
+      document.querySelector(`#jojo-${theId} .classTotalP`).textContent = 'Prixv total pour cet article: ' + product.price * theQuantity;     
+      return;   
+  })}
+
 for (product of basket) {
+  callMe(product.id, product.quantity);
   document.querySelector(
     "#cart__items"
-  ).innerHTML += `<article class="cart__item" data-id="${product._id}" data-color="${product.color}">
+  ).innerHTML += `<article class="cart__item" data-id="${product.id}" data-color="${product.color}">
         <div class="cart__item__img">
             <img src="${product.img}" alt="${product.altTxt}">
         </div>
@@ -25,12 +40,12 @@ for (product of basket) {
             <div class="cart__item__content__description">
                 <h2>${product.name}</h2>
                 <p>Couleur du produit: ${product.color}</p>
-                <p>Prix unitaire: ${product.price}€</p>
+                <p id="precio-${product.id}"></p>
             </div>
         <div class="cart__item__content__settings">
-            <div id="jojo" class="cart__item__content__settings__quantity">
+            <div id="jojo-${product.id}" class="cart__item__content__settings__quantity">
                 <p id="quantité">Qté : ${product.quantity} </p>
-                <p id="sousTotal">Prix total pour cet article: ${product.totalPrice}€</p> 
+                <p id="sousTotal" class="classTotalP">Prix total pour cet article: €</p> 
                 <input type="number" onchange="changeHandler(this)" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${product.quantity}">
             </div>
             <div class="cart__item__content__settings__delete">
@@ -43,7 +58,10 @@ for (product of basket) {
   // Récupération des Id de chaque articles et envoi dans le tableau de la variable products[]
   products.push(product.id);
   console.log(products);
+
+
 }
+
 
 // Fonction récupération des prix des articles et somme totale
 
